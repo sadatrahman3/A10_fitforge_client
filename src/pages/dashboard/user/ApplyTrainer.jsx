@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { toast } from 'react-toastify';
+import api from '../../../utils/axios';
 
 export default function ApplyTrainer() {
   const { user, updateUser } = useAuth();
@@ -12,11 +13,11 @@ export default function ApplyTrainer() {
     e.preventDefault();
     setLoading(true);
     try {
-      // Will connect to API later
+      await api.post('/trainers/apply', form);
       toast.success('Application submitted! Awaiting admin review.');
       updateUser({ ...user, trainerApplicationStatus: 'pending' });
     } catch (err) {
-      toast.error('Failed to submit application');
+      toast.error(err.response?.data?.message || 'Failed to submit application');
     } finally {
       setLoading(false);
     }
@@ -29,7 +30,7 @@ export default function ApplyTrainer() {
         <h1 className="text-2xl font-bold text-light">Apply as Trainer</h1>
         {user?.trainerApplicationStatus === 'pending' && <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6 text-yellow-400">Your application is pending review.</div>}
         {user?.trainerApplicationStatus === 'rejected' && <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6 text-red-400">Your application was rejected. {user.rejectionFeedback && `Feedback: ${user.rejectionFeedback}`}</div>}
-        {(!user?.trainerApplicationStatus || user?.trainerApplicationStatus === 'rejected') && (
+        {(!user?.trainerApplicationStatus || user?.trainerApplicationStatus === 'none' || user?.trainerApplicationStatus === 'rejected') && (
           <form onSubmit={handleSubmit} className="bg-card rounded-xl p-8 space-y-6 max-w-lg">
             <div>
               <label className="block text-sm text-muted mb-1">Experience (years)</label>
