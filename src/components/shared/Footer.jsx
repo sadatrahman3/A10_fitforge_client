@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Dumbbell, FaFacebook, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Dumbbell, Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Footer() {
   return (
