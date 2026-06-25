@@ -17,6 +17,23 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: var(--color-dark);
   color: var(--color-light);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+html.light {
+  --color-dark: #f8f9fa;
+  --color-darker: #e9ecef;
+  --color-secondary: #ffffff;
+  --color-card: #ffffff;
+  --color-card-hover: #f1f3f5;
+  --color-light: #212529;
+  --color-muted: #6c757d;
+  --color-accent: #457b9d;
+}
+
+html.light body {
+  background-color: var(--color-dark);
+  color: var(--color-light);
 }
 
 /* Custom scrollbar */

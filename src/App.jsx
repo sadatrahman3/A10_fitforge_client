@@ -1,8 +1,10 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import { HelmetProvider } from 'react-helmet-async';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/shared/Navbar';
 import Footer from './components/shared/Footer';
 import Home from './pages/home/Home';
@@ -38,49 +40,67 @@ import PrivateRoute from './components/shared/PrivateRoute';
 import AdminRoute from './components/shared/AdminRoute';
 import TrainerRoute from './components/shared/TrainerRoute';
 
+function AnimatedRoutes() {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.2 }}
+        className="flex flex-col min-h-screen"
+      >
+        <Routes location={location}>
+          <Route path="/" element={<><Navbar /><Home /><Footer /></>} />
+          <Route path="/classes" element={<><Navbar /><AllClasses /><Footer /></>} />
+          <Route path="/login" element={<><Navbar /><Login /><Footer /></>} />
+          <Route path="/register" element={<><Navbar /><Register /><Footer /></>} />
+          <Route path="/class/:id" element={<PrivateRoute><><Navbar /><ClassDetails /><Footer /></></PrivateRoute>} />
+          <Route path="/payment/:id" element={<PrivateRoute><><Navbar /><Payment /><Footer /></></PrivateRoute>} />
+          <Route path="/forum" element={<><Navbar /><Forum /><Footer /></>} />
+          <Route path="/forum/:id" element={<PrivateRoute><><Navbar /><ForumPostDetails /><Footer /></></PrivateRoute>} />
+
+          <Route path="/dashboard" element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
+            <Route index element={<UserOverview />} />
+            <Route path="booked-classes" element={<BookedClasses />} />
+            <Route path="favorites" element={<FavoriteClasses />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="apply-trainer" element={<ApplyTrainer />} />
+            <Route path="trainer" element={<TrainerRoute><TrainerOverview /></TrainerRoute>} />
+            <Route path="trainer/add-class" element={<TrainerRoute><AddClass /></TrainerRoute>} />
+            <Route path="trainer/my-classes" element={<TrainerRoute><MyClasses /></TrainerRoute>} />
+            <Route path="trainer/add-post" element={<TrainerRoute><TrainerAddPost /></TrainerRoute>} />
+            <Route path="trainer/my-posts" element={<TrainerRoute><TrainerMyPosts /></TrainerRoute>} />
+            <Route path="admin" element={<AdminRoute><AdminOverview /></AdminRoute>} />
+            <Route path="admin/manage-users" element={<AdminRoute><ManageUsers /></AdminRoute>} />
+            <Route path="admin/applied-trainers" element={<AdminRoute><AppliedTrainers /></AdminRoute>} />
+            <Route path="admin/manage-trainers" element={<AdminRoute><ManageTrainers /></AdminRoute>} />
+            <Route path="admin/manage-classes" element={<AdminRoute><ManageClasses /></AdminRoute>} />
+            <Route path="admin/add-post" element={<AdminRoute><AdminAddPost /></AdminRoute>} />
+            <Route path="admin/transactions" element={<AdminRoute><AdminTransactions /></AdminRoute>} />
+            <Route path="admin/forum-manage" element={<AdminRoute><ForumManage /></AdminRoute>} />
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 function App() {
   return (
     <HelmetProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <div className="flex flex-col min-h-screen">
-            <Routes>
-              <Route path="/" element={<><Navbar /><Home /><Footer /></>} />
-              <Route path="/classes" element={<><Navbar /><AllClasses /><Footer /></>} />
-              <Route path="/login" element={<><Navbar /><Login /><Footer /></>} />
-              <Route path="/register" element={<><Navbar /><Register /><Footer /></>} />
-              <Route path="/class/:id" element={<PrivateRoute><><Navbar /><ClassDetails /><Footer /></></PrivateRoute>} />
-              <Route path="/payment/:id" element={<PrivateRoute><><Navbar /><Payment /><Footer /></></PrivateRoute>} />
-              <Route path="/forum" element={<><Navbar /><Forum /><Footer /></>} />
-              <Route path="/forum/:id" element={<PrivateRoute><><Navbar /><ForumPostDetails /><Footer /></></PrivateRoute>} />
-
-              <Route path="/dashboard" element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
-                <Route index element={<UserOverview />} />
-                <Route path="booked-classes" element={<BookedClasses />} />
-                <Route path="favorites" element={<FavoriteClasses />} />
-                <Route path="profile" element={<Profile />} />
-                <Route path="apply-trainer" element={<ApplyTrainer />} />
-                <Route path="trainer" element={<TrainerRoute><TrainerOverview /></TrainerRoute>} />
-                <Route path="trainer/add-class" element={<TrainerRoute><AddClass /></TrainerRoute>} />
-                <Route path="trainer/my-classes" element={<TrainerRoute><MyClasses /></TrainerRoute>} />
-                <Route path="trainer/add-post" element={<TrainerRoute><TrainerAddPost /></TrainerRoute>} />
-                <Route path="trainer/my-posts" element={<TrainerRoute><TrainerMyPosts /></TrainerRoute>} />
-                <Route path="admin" element={<AdminRoute><AdminOverview /></AdminRoute>} />
-                <Route path="admin/manage-users" element={<AdminRoute><ManageUsers /></AdminRoute>} />
-                <Route path="admin/applied-trainers" element={<AdminRoute><AppliedTrainers /></AdminRoute>} />
-                <Route path="admin/manage-trainers" element={<AdminRoute><ManageTrainers /></AdminRoute>} />
-                <Route path="admin/manage-classes" element={<AdminRoute><ManageClasses /></AdminRoute>} />
-                <Route path="admin/add-post" element={<AdminRoute><AdminAddPost /></AdminRoute>} />
-                <Route path="admin/transactions" element={<AdminRoute><AdminTransactions /></AdminRoute>} />
-                <Route path="admin/forum-manage" element={<AdminRoute><ForumManage /></AdminRoute>} />
-              </Route>
-
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </div>
-          <ToastContainer position="top-right" autoClose={3000} theme="dark" />
-        </BrowserRouter>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <AnimatedRoutes />
+            <ToastContainer position="top-right" autoClose={3000} theme="dark" />
+          </BrowserRouter>
+        </AuthProvider>
+      </ThemeProvider>
     </HelmetProvider>
   );
 }

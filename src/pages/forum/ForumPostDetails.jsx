@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import { ThumbsUp, ThumbsDown, MessageCircle, ArrowLeft, Send, Trash2, Edit } from 'lucide-react';
+import { motion } from 'framer-motion';
 import api from '../../utils/axios';
 import { getPhotoSrc } from '../../utils/photoUrl';
 
@@ -90,7 +91,12 @@ export default function ForumPostDetails() {
       <div className="min-h-[60vh] max-w-4xl mx-auto px-4 py-12">
         <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-muted hover:text-light mb-6 transition"><ArrowLeft size={18} /> Back</button>
 
-        <article className="bg-card rounded-2xl overflow-hidden shadow-xl mb-8">
+        <motion.article
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-card rounded-2xl overflow-hidden shadow-xl mb-8"
+        >
           {post.image && <div className="h-64 md:h-80 bg-accent/10 overflow-hidden"><img src={post.image} alt={post.title} className="w-full h-full object-cover" /></div>}
           <div className="p-8">
             <h1 className="text-3xl font-bold text-light mb-4">{post.title}</h1>
@@ -113,9 +119,14 @@ export default function ForumPostDetails() {
               <span className="flex items-center gap-2 text-muted"><MessageCircle size={18} /> {comments.length} comments</span>
             </div>
           </div>
-        </article>
+        </motion.article>
 
-        <div className="bg-card rounded-2xl p-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="bg-card rounded-2xl p-8"
+        >
           <h2 className="text-xl font-bold text-light mb-6">Comments</h2>
 
           {user && (
@@ -159,7 +170,7 @@ export default function ForumPostDetails() {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </>
   );

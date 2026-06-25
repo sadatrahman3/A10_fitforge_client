@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Search, Filter, Dumbbell } from 'lucide-react';
+import { motion } from 'framer-motion';
 import api from '../../utils/axios';
 
 const CATEGORIES = ['All', 'Yoga', 'Cardio', 'Weights', 'HIIT', 'CrossFit', 'Pilates', 'Martial Arts'];
@@ -42,7 +43,7 @@ export default function AllClasses() {
     <>
       <Helmet><title>All Classes - FitForge</title></Helmet>
       <div className="min-h-[60vh] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-3xl font-bold text-light mb-8">All Fitness Classes</h1>
+        <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-3xl font-bold text-light mb-8">All Fitness Classes</motion.h1>
 
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           <form onSubmit={handleSearch} className="flex-1 flex gap-2">
@@ -73,9 +74,20 @@ export default function AllClasses() {
           <div className="text-center py-20"><Dumbbell size={48} className="text-muted mx-auto mb-4" /><p className="text-muted text-lg">No classes found matching your criteria.</p></div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {classes.map((cls) => (
-                <div key={cls._id} className="bg-card rounded-2xl overflow-hidden shadow-xl hover:shadow-primary/20 transition">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            >
+              {classes.map((cls, i) => (
+                <motion.div
+                  key={cls._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: i * 0.08 }}
+                  className="bg-card rounded-2xl overflow-hidden shadow-xl hover:shadow-primary/20 transition"
+                >
                   <div className="h-48 bg-accent/10 flex items-center justify-center overflow-hidden">
                     {cls.image ? <img src={cls.image} alt={cls.className} className="w-full h-full object-cover" /> : <Dumbbell size={48} className="text-accent" />}
                   </div>
@@ -92,9 +104,9 @@ export default function AllClasses() {
                     </div>
                     <Link to={`/class/${cls._id}`} className="block text-center bg-primary/10 text-primary hover:bg-primary hover:text-white py-2.5 rounded-lg font-semibold transition">View Details</Link>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             {totalPages > 1 && (
               <div className="flex justify-center gap-2 mt-10">

@@ -1,11 +1,13 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Dumbbell, Menu, X } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
+import { Dumbbell, Menu, X, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
 import { getPhotoSrc } from '../../utils/photoUrl';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navLinks = (
@@ -43,6 +45,9 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
+            <button onClick={toggleTheme} className="p-2 rounded-lg hover:bg-accent/20 transition text-light" aria-label="Toggle theme">
+              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
             {user ? (
               <div className="flex items-center gap-3">
                 <img src={getPhotoSrc(user.photoURL) || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} onError={(e) => { e.target.src = 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'; }} alt="" className="w-9 h-9 rounded-full border-2 border-primary" />
@@ -65,6 +70,9 @@ export default function Navbar() {
 
       {mobileOpen && (
         <div className="md:hidden bg-secondary border-t border-accent/20 px-4 pb-4 space-y-3 text-sm text-light">
+          <button onClick={toggleTheme} className="flex items-center gap-2 py-2 text-muted hover:text-light transition">
+            {theme === 'dark' ? <><Sun size={16} /> Light Mode</> : <><Moon size={16} /> Dark Mode</>}
+          </button>
           {navLinks}
           {user && <NavLink to={dashboardLink()} onClick={() => setMobileOpen(false)}>Dashboard</NavLink>}
           {user ? (

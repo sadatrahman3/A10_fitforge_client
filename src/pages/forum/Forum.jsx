@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { FileText } from 'lucide-react';
+import { motion } from 'framer-motion';
 import api from '../../utils/axios';
 
 export default function Forum() {
@@ -22,7 +23,7 @@ export default function Forum() {
     <>
       <Helmet><title>Community Forum - FitForge</title></Helmet>
       <div className="min-h-[60vh] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-3xl font-bold text-light mb-2">Community Forum</h1>
+        <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-3xl font-bold text-light mb-2">Community Forum</motion.h1>
         <p className="text-muted mb-8">Read and discuss fitness topics with the community.</p>
 
         {loading ? (
@@ -35,9 +36,20 @@ export default function Forum() {
           <div className="text-center py-20"><FileText size={48} className="text-muted mx-auto mb-4" /><p className="text-muted text-lg">No forum posts yet.</p></div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {posts.map((post) => (
-                <div key={post._id} className="bg-card rounded-2xl overflow-hidden hover:bg-card-hover transition">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            >
+              {posts.map((post, i) => (
+                <motion.div
+                  key={post._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: i * 0.08 }}
+                  className="bg-card rounded-2xl overflow-hidden hover:bg-card-hover transition"
+                >
                   <div className="h-48 bg-accent/10 overflow-hidden">
                     {post.image ? <img src={post.image} alt={post.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-muted"><FileText size={32} /></div>}
                   </div>
@@ -50,9 +62,9 @@ export default function Forum() {
                       <Link to={`/forum/${post._id}`} className="text-primary text-sm font-semibold hover:underline">Read More →</Link>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             {totalPages > 1 && (
               <div className="flex justify-center gap-2 mt-10">

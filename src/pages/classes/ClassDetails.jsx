@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import { Dumbbell, Clock, User, Calendar, Tag, Heart, ArrowLeft } from 'lucide-react';
+import { motion } from 'framer-motion';
 import api from '../../utils/axios';
 
 export default function ClassDetails() {
@@ -59,7 +60,12 @@ export default function ClassDetails() {
       <Helmet><title>{cls.className} - FitForge</title></Helmet>
       <div className="min-h-[60vh] max-w-5xl mx-auto px-4 py-12">
         <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-muted hover:text-light mb-6 transition"><ArrowLeft size={18} /> Back</button>
-        <div className="bg-card rounded-2xl overflow-hidden shadow-xl">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-card rounded-2xl overflow-hidden shadow-xl"
+        >
           <div className="h-64 md:h-80 bg-accent/10 flex items-center justify-center overflow-hidden">
             {cls.image ? <img src={cls.image} alt={cls.className} className="w-full h-full object-cover" /> : <Dumbbell size={64} className="text-accent" />}
           </div>
@@ -87,7 +93,7 @@ export default function ClassDetails() {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </>
   );
