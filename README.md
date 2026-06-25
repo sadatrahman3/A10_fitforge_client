@@ -1,0 +1,35 @@
+# FitForge Client
+
+**Live Site:** https://fitforge.vercel.app  
+**Server Repo:** https://github.com/sadatrahman3/A10_fitforge_server
+
+## Purpose
+FitForge is a comprehensive fitness management platform for fitness enthusiasts, gym trainers, and administrators.
+
+## Key Features
+- Role-based dashboards (User, Trainer, Admin)
+- Class booking with Stripe payment integration
+- Community forum with posts, comments, likes/dislikes
+- Trainer application and approval system
+- Admin management for users, trainers, classes, and forum
+- Responsive dark theme UI with Framer Motion animations
+
+## Tech Stack
+- React + Vite
+- Tailwind CSS
+- React Router v6
+- Framer Motion
+- Axios
+- React Toastify
+- Lucide React Icons
+
+## NPM Packages
+- `react-router-dom` - Routing
+- `tailwindcss` - Styling
+- `framer-motion` - Animations
+- `axios` - HTTP client
+- `react-icons` - Icons
+- `react-toastify` - Notifications
+- `react-helmet-async` - SEO
+- `@stripe/stripe-js` - Payments
+- `lucide-react` - Icons
