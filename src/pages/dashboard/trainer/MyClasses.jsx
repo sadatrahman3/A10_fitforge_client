@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { toast } from 'react-toastify';
 import api from '../../../utils/axios';
+import { getPhotoSrc } from '../../../utils/photoUrl';
 
 export default function MyClasses() {
   const { user } = useAuth();
@@ -107,7 +108,7 @@ export default function MyClasses() {
                 <div className="space-y-2">
                   {attendees.map((a) => (
                     <div key={a._id} className="bg-dark rounded-lg p-3 flex items-center gap-3">
-                      <img src={a.userId?.photoURL || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} alt="" className="w-8 h-8 rounded-full" />
+                      <img src={getPhotoSrc(a.userId?.photoURL) || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} onError={(e) => { e.target.src = 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'; }} alt="" className="w-8 h-8 rounded-full" />
                       <div><p className="text-light text-sm font-semibold">{a.userId?.name}</p><p className="text-muted text-xs">{a.userId?.email}</p></div>
                     </div>
                   ))}

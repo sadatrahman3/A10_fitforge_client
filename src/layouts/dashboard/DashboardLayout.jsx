@@ -1,7 +1,8 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { LayoutDashboard, BookOpen, Heart, Award, Dumbbell, Users, UserCheck, CreditCard, FileText, PlusCircle, List, Menu, X } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Heart, Award, Dumbbell, Users, UserCheck, CreditCard, FileText, PlusCircle, List, Menu, X, UserCog } from 'lucide-react';
 import { useState } from 'react';
+import { getPhotoSrc } from '../../utils/photoUrl';
 
 export default function DashboardLayout() {
   const { user } = useAuth();
@@ -13,6 +14,7 @@ export default function DashboardLayout() {
     { to: '/dashboard/booked-classes', icon: <BookOpen size={18} />, label: 'Booked Classes' },
     { to: '/dashboard/favorites', icon: <Heart size={18} />, label: 'Favorites' },
     { to: '/dashboard/apply-trainer', icon: <Award size={18} />, label: 'Apply as Trainer' },
+    { to: '/dashboard/profile', icon: <UserCog size={18} />, label: 'Edit Profile' },
   ];
 
   const trainerLinks = [
@@ -21,6 +23,7 @@ export default function DashboardLayout() {
     { to: '/dashboard/trainer/my-classes', icon: <List size={18} />, label: 'My Classes' },
     { to: '/dashboard/trainer/add-post', icon: <FileText size={18} />, label: 'Add Forum Post' },
     { to: '/dashboard/trainer/my-posts', icon: <FileText size={18} />, label: 'My Forum Posts' },
+    { to: '/dashboard/profile', icon: <UserCog size={18} />, label: 'Edit Profile' },
   ];
 
   const adminLinks = [
@@ -32,6 +35,7 @@ export default function DashboardLayout() {
     { to: '/dashboard/admin/add-post', icon: <FileText size={18} />, label: 'Add Forum Post' },
     { to: '/dashboard/admin/transactions', icon: <CreditCard size={18} />, label: 'Transactions' },
     { to: '/dashboard/admin/forum-manage', icon: <FileText size={18} />, label: 'Forum Management' },
+    { to: '/dashboard/profile', icon: <UserCog size={18} />, label: 'Edit Profile' },
   ];
 
   const links = role === 'admin' ? adminLinks : role === 'trainer' ? trainerLinks : userLinks;
@@ -41,7 +45,7 @@ export default function DashboardLayout() {
     <div className="flex flex-col h-full">
       <div className="p-6 border-b border-accent/20">
         <div className="flex items-center gap-3">
-          <img src={user?.photoURL || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} alt="" className="w-12 h-12 rounded-full border-2 border-primary" />
+          <img src={getPhotoSrc(user?.photoURL) || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} onError={(e) => { e.target.src = 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'; }} alt="" className="w-12 h-12 rounded-full border-2 border-primary" />
           <div>
             <p className="text-light font-semibold text-sm truncate">{user?.name}</p>
             <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${role === 'admin' ? 'bg-red-500/20 text-red-400' : role === 'trainer' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-accent/20 text-accent'}`}>

@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import { ThumbsUp, ThumbsDown, MessageCircle, ArrowLeft, Send, Trash2, Edit } from 'lucide-react';
 import api from '../../utils/axios';
+import { getPhotoSrc } from '../../utils/photoUrl';
 
 export default function ForumPostDetails() {
   const { id } = useParams();
@@ -94,7 +95,7 @@ export default function ForumPostDetails() {
           <div className="p-8">
             <h1 className="text-3xl font-bold text-light mb-4">{post.title}</h1>
             <div className="flex items-center gap-3 mb-6">
-              <img src={post.authorPhoto || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} alt="" className="w-10 h-10 rounded-full" />
+              <img src={getPhotoSrc(post.authorPhoto) || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} onError={(e) => { e.target.src = 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'; }} alt="" className="w-10 h-10 rounded-full" />
               <div>
                 <p className="text-light font-semibold text-sm">{post.authorName}</p>
                 <p className="text-muted text-xs capitalize">{post.authorRole} · {new Date(post.createdAt).toLocaleDateString()}</p>
@@ -119,7 +120,7 @@ export default function ForumPostDetails() {
 
           {user && (
             <form onSubmit={handleComment} className="flex gap-3 mb-8">
-              <img src={user.photoURL || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} alt="" className="w-10 h-10 rounded-full flex-shrink-0" />
+              <img src={getPhotoSrc(user.photoURL) || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} onError={(e) => { e.target.src = 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'; }} alt="" className="w-10 h-10 rounded-full flex-shrink-0" />
               <div className="flex-1 flex gap-2">
                 <input value={commentText} onChange={(e) => setCommentText(e.target.value)} placeholder="Write a comment..." className="flex-1 bg-dark border border-accent/30 rounded-lg px-4 py-3 text-light focus:border-primary outline-none transition" />
                 <button type="submit" className="bg-primary hover:bg-primary-dark p-3 rounded-lg text-white transition"><Send size={18} /></button>
@@ -132,7 +133,7 @@ export default function ForumPostDetails() {
             {comments.map((comment) => (
               <div key={comment._id} className="bg-dark rounded-xl p-4">
                 <div className="flex items-start gap-3">
-                  <img src={comment.authorPhoto || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} alt="" className="w-8 h-8 rounded-full flex-shrink-0" />
+                  <img src={getPhotoSrc(comment.authorPhoto) || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} onError={(e) => { e.target.src = 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'; }} alt="" className="w-8 h-8 rounded-full flex-shrink-0" />
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <p className="text-light font-semibold text-sm">{comment.authorName}</p>

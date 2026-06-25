@@ -3,6 +3,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { Users, Dumbbell, BookOpen } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import api from '../../../utils/axios';
+import { getPhotoSrc } from '../../../utils/photoUrl';
 
 export default function AdminOverview() {
   const { user } = useAuth();
@@ -36,7 +37,7 @@ export default function AdminOverview() {
         <div className="bg-card rounded-xl p-6">
           <h2 className="text-lg font-bold text-light mb-4">Admin Profile</h2>
           <div className="flex items-center gap-4">
-            <img src={user?.photoURL || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} alt="" className="w-16 h-16 rounded-full border-2 border-primary" />
+            <img src={getPhotoSrc(user?.photoURL) || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} onError={(e) => { e.target.src = 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'; }} alt="" className="w-16 h-16 rounded-full border-2 border-primary" />
             <div>
               <p className="text-light font-semibold">{user?.name}</p>
               <p className="text-muted text-sm">{user?.email}</p>

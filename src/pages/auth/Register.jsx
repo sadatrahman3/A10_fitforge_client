@@ -15,6 +15,7 @@ export default function Register() {
     if (form.password.length < 6) { toast.error('Password must be at least 6 characters'); return false; }
     if (!/[A-Z]/.test(form.password)) { toast.error('Password must contain an uppercase letter'); return false; }
     if (!/[a-z]/.test(form.password)) { toast.error('Password must contain a lowercase letter'); return false; }
+    if (form.photoURL && !form.photoURL.startsWith('http')) { toast.error('Photo URL must be a valid https link'); return false; }
     return true;
   };
 

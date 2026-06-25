@@ -13,8 +13,8 @@ export default function Home() {
   useEffect(() => {
     api.get('/classes/featured').then((r) => setFeaturedClasses(r.data)).catch(() => {});
     api.get('/forum/latest').then((r) => setLatestPosts(r.data)).catch(() => {});
-    api.get('/admin/stats').then((r) => {
-      setStats({ classes: r.data.totalClasses, members: r.data.totalUsers, trainers: 30, workouts: r.data.totalBookings });
+    api.get('/stats').then((r) => {
+      setStats({ classes: r.data.totalClasses, members: r.data.totalUsers, trainers: 30, workouts: r.data.totalPosts });
     }).catch(() => {});
   }, []);
 

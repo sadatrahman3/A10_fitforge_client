@@ -2,6 +2,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Dumbbell, Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { getPhotoSrc } from '../../utils/photoUrl';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -44,7 +45,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-4">
             {user ? (
               <div className="flex items-center gap-3">
-                <img src={user.photoURL || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} alt="" className="w-9 h-9 rounded-full border-2 border-primary" />
+                <img src={getPhotoSrc(user.photoURL) || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} onError={(e) => { e.target.src = 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'; }} alt="" className="w-9 h-9 rounded-full border-2 border-primary" />
                 <button onClick={logout} className="bg-primary hover:bg-primary-dark px-4 py-2 rounded-lg text-sm font-semibold transition">
                   Logout
                 </button>
@@ -68,7 +69,7 @@ export default function Navbar() {
           {user && <NavLink to={dashboardLink()} onClick={() => setMobileOpen(false)}>Dashboard</NavLink>}
           {user ? (
             <div className="flex items-center gap-3 pt-2">
-              <img src={user.photoURL || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} alt="" className="w-8 h-8 rounded-full" />
+              <img src={getPhotoSrc(user.photoURL) || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} onError={(e) => { e.target.src = 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'; }} alt="" className="w-8 h-8 rounded-full" />
               <button onClick={() => { logout(); setMobileOpen(false); }} className="bg-primary px-4 py-2 rounded-lg text-sm font-semibold">Logout</button>
             </div>
           ) : (

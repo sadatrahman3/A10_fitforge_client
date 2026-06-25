@@ -18,6 +18,7 @@ import UserOverview from './pages/dashboard/user/UserOverview';
 import BookedClasses from './pages/dashboard/user/BookedClasses';
 import FavoriteClasses from './pages/dashboard/user/FavoriteClasses';
 import ApplyTrainer from './pages/dashboard/user/ApplyTrainer';
+import Profile from './pages/dashboard/user/Profile';
 import TrainerOverview from './pages/dashboard/trainer/TrainerOverview';
 import AddClass from './pages/dashboard/trainer/AddClass';
 import MyClasses from './pages/dashboard/trainer/MyClasses';
@@ -57,6 +58,7 @@ function App() {
                 <Route index element={<UserOverview />} />
                 <Route path="booked-classes" element={<BookedClasses />} />
                 <Route path="favorites" element={<FavoriteClasses />} />
+                <Route path="profile" element={<Profile />} />
                 <Route path="apply-trainer" element={<ApplyTrainer />} />
                 <Route path="trainer" element={<TrainerRoute><TrainerOverview /></TrainerRoute>} />
                 <Route path="trainer/add-class" element={<TrainerRoute><AddClass /></TrainerRoute>} />
