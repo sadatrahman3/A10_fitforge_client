@@ -1,8 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
+import { useAuth } from '../../../context/AuthContext';
 import { toast } from 'react-toastify';
+import api from '../../../utils/axios';
 
 export default function AddClass() {
+  const { user } = useAuth();
   const [form, setForm] = useState({ className: '', image: '', category: '', difficulty: '', duration: '', schedule: '', price: '', description: '' });
   const [loading, setLoading] = useState(false);
 
@@ -12,10 +15,16 @@ export default function AddClass() {
     e.preventDefault();
     setLoading(true);
     try {
+      await api.post('/classes', {
+        ...form,
+        duration: Number(form.duration),
+        price: Number(form.price),
+        trainerName: user.name,
+      });
       toast.success('Class submitted for review!');
       setForm({ className: '', image: '', category: '', difficulty: '', duration: '', schedule: '', price: '', description: '' });
-    } catch {
-      toast.error('Failed to add class');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to add class');
     } finally {
       setLoading(false);
     }
@@ -60,11 +69,11 @@ export default function AddClass() {
             </div>
             <div>
               <label className="block text-sm text-muted mb-1">Duration (min)</label>
-              <input name="duration" type="number" required value={form.duration} onChange={handleChange} className="w-full bg-dark border border-accent/30 rounded-lg px-4 py-3 text-light focus:border-primary outline-none transition" />
+              <input name="duration" type="number" required min="1" value={form.duration} onChange={handleChange} className="w-full bg-dark border border-accent/30 rounded-lg px-4 py-3 text-light focus:border-primary outline-none transition" />
             </div>
             <div>
               <label className="block text-sm text-muted mb-1">Price ($)</label>
-              <input name="price" type="number" step="0.01" required value={form.price} onChange={handleChange} className="w-full bg-dark border border-accent/30 rounded-lg px-4 py-3 text-light focus:border-primary outline-none transition" />
+              <input name="price" type="number" step="0.01" required min="0" value={form.price} onChange={handleChange} className="w-full bg-dark border border-accent/30 rounded-lg px-4 py-3 text-light focus:border-primary outline-none transition" />
             </div>
           </div>
           <div>

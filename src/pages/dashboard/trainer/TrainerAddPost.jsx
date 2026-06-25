@@ -1,8 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
+import { useAuth } from '../../../context/AuthContext';
 import { toast } from 'react-toastify';
+import api from '../../../utils/axios';
 
 export default function TrainerAddPost() {
+  const { user } = useAuth();
   const [form, setForm] = useState({ title: '', image: '', description: '' });
   const [loading, setLoading] = useState(false);
 
@@ -12,10 +15,11 @@ export default function TrainerAddPost() {
     e.preventDefault();
     setLoading(true);
     try {
+      await api.post('/forum', { ...form, authorName: user.name });
       toast.success('Post published!');
       setForm({ title: '', image: '', description: '' });
-    } catch {
-      toast.error('Failed to publish post');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to publish post');
     } finally {
       setLoading(false);
     }
