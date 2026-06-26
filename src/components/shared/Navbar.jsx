@@ -10,11 +10,11 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const navLinks = (
+  const navLinks = (onMobileClick) => (
     <>
-      <NavLink to="/" className={({ isActive }) => isActive ? 'text-primary font-semibold' : 'hover:text-primary transition'}>Home</NavLink>
-      <NavLink to="/classes" className={({ isActive }) => isActive ? 'text-primary font-semibold' : 'hover:text-primary transition'}>All Classes</NavLink>
-      <NavLink to="/forum" className={({ isActive }) => isActive ? 'text-primary font-semibold' : 'hover:text-primary transition'}>Community Forum</NavLink>
+      <NavLink to="/" onClick={onMobileClick} className={({ isActive }) => `block py-2 ${isActive ? 'text-primary font-semibold' : 'hover:text-primary transition'}`}>Home</NavLink>
+      <NavLink to="/classes" onClick={onMobileClick} className={({ isActive }) => `block py-2 ${isActive ? 'text-primary font-semibold' : 'hover:text-primary transition'}`}>All Classes</NavLink>
+      <NavLink to="/forum" onClick={onMobileClick} className={({ isActive }) => `block py-2 ${isActive ? 'text-primary font-semibold' : 'hover:text-primary transition'}`}>Community Forum</NavLink>
     </>
   );
 
@@ -36,7 +36,7 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center gap-6 text-sm text-light">
-            {navLinks}
+            {navLinks()}
             {user && (
               <NavLink to={dashboardLink()} className={({ isActive }) => isActive ? 'text-primary font-semibold' : 'hover:text-primary transition'}>
                 Dashboard
@@ -73,8 +73,8 @@ export default function Navbar() {
           <button onClick={toggleTheme} className="flex items-center gap-2 py-2 text-muted hover:text-light transition">
             {theme === 'dark' ? <><Sun size={16} /> Light Mode</> : <><Moon size={16} /> Dark Mode</>}
           </button>
-          {navLinks}
-          {user && <NavLink to={dashboardLink()} onClick={() => setMobileOpen(false)}>Dashboard</NavLink>}
+          {navLinks(() => setMobileOpen(false))}
+          {user && <NavLink to={dashboardLink()} onClick={() => setMobileOpen(false)} className="block py-2">Dashboard</NavLink>}
           {user ? (
             <div className="flex items-center gap-3 pt-2">
               <img src={getPhotoSrc(user.photoURL) || 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'} onError={(e) => { e.target.src = 'https://i.ibb.co/MBtjqXQ/no-avatar.gif'; }} alt="" className="w-8 h-8 rounded-full" />
