@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { toast } from 'react-toastify';
 import api from '../../../utils/axios';
+import ImageUploadField from '../../../components/shared/ImageUploadField';
 
 export default function AddClass() {
   const { user } = useAuth();
@@ -42,8 +43,7 @@ export default function AddClass() {
               <input name="className" required value={form.className} onChange={handleChange} className="w-full bg-dark border border-accent/30 rounded-lg px-4 py-3 text-light focus:border-primary outline-none transition" />
             </div>
             <div>
-              <label className="block text-sm text-muted mb-1">Image URL</label>
-              <input name="image" value={form.image} onChange={handleChange} className="w-full bg-dark border border-accent/30 rounded-lg px-4 py-3 text-light focus:border-primary outline-none transition" placeholder="https://..." />
+              <ImageUploadField value={form.image} onChange={(url) => setForm({ ...form, image: url })} label="Class Image" />
             </div>
             <div>
               <label className="block text-sm text-muted mb-1">Category</label>
