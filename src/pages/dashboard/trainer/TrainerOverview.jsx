@@ -10,8 +10,8 @@ export default function TrainerOverview() {
   const [stats, setStats] = useState({ classes: 0, students: 0 });
 
   useEffect(() => {
-    api.get('/admin/classes').then((r) => {
-      const myClasses = r.data.filter((c) => c.trainerId === user?.id);
+    api.get('/classes/my').then((r) => {
+      const myClasses = r.data;
       const totalStudents = myClasses.reduce((sum, c) => sum + (c.bookingCount || 0), 0);
       setStats({ classes: myClasses.length, students: totalStudents });
     }).catch(() => {});

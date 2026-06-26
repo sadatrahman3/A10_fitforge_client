@@ -1,18 +1,17 @@
 import { Helmet } from 'react-helmet-async';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import { CreditCard, Dumbbell, CheckCircle } from 'lucide-react';
 import api from '../../utils/axios';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-
 export default function Payment() {
   const { id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const confirmedRef = useRef(false);
   const [cls, setCls] = useState(null);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
@@ -21,29 +20,37 @@ export default function Payment() {
     api.get(`/classes/${id}`).then((r) => { setCls(r.data); setLoading(false); }).catch(() => { setLoading(false); toast.error('Class not found'); });
   }, [id]);
 
+  useEffect(() => {
+    const sessionId = searchParams.get('session_id');
+    const paymentSucceeded = searchParams.get('success') === 'true';
+    if (!cls || !paymentSucceeded || !sessionId || confirmedRef.current) return;
+
+    confirmedRef.current = true;
+    setProcessing(true);
+    api.post('/payments/confirm', { sessionId, classId: id })
+      .then(() => {
+        toast.success('Payment successful! Class booked.');
+        navigate('/dashboard/booked-classes', { replace: true });
+      })
+      .catch((err) => {
+        toast.error(err.response?.data?.message || 'Payment confirmation failed');
+        navigate(`/class/${id}`, { replace: true });
+      })
+      .finally(() => setProcessing(false));
+  }, [cls, id, navigate, searchParams]);
+
   const handlePayment = async () => {
+    if (user?.status === 'blocked') return toast.error('Action restricted by Admin');
     setProcessing(true);
     try {
       const res = await api.post('/payments/create-checkout-session', {
         classId: id,
-        className: cls.className,
-        price: cls.price,
-        trainerName: cls.trainerName,
       });
 
       if (res.data.url) {
         window.location.href = res.data.url;
       } else {
-        await api.post('/payments/confirm', {
-          sessionId: `sim_${Date.now()}`,
-          classId: id,
-          className: cls.className,
-          trainerName: cls.trainerName,
-          price: cls.price,
-        });
-        await api.post('/bookings', { classId: id, transactionId: `sim_${Date.now()}` });
-        toast.success('Payment successful! Class booked.');
-        navigate('/dashboard/booked-classes');
+        toast.error('Stripe checkout did not return a payment URL');
       }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Payment failed');
@@ -79,7 +86,7 @@ export default function Payment() {
 
           <button onClick={handlePayment} disabled={processing} className="w-full bg-primary hover:bg-primary-dark text-white py-4 rounded-xl font-bold text-lg transition disabled:opacity-50 flex items-center justify-center gap-2">
             {processing ? (
-              <>Processing...</>
+              <>{searchParams.get('success') === 'true' ? 'Confirming payment...' : 'Processing...'}</>
             ) : (
               <><CheckCircle size={20} /> Pay ${cls.price}</>
             )}

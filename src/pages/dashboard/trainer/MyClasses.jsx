@@ -1,12 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 import { useState, useEffect } from 'react';
-import { useAuth } from '../../../context/AuthContext';
 import { toast } from 'react-toastify';
 import api from '../../../utils/axios';
 import { getPhotoSrc } from '../../../utils/photoUrl';
 
 export default function MyClasses() {
-  const { user } = useAuth();
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingClass, setEditingClass] = useState(null);
@@ -19,9 +17,7 @@ export default function MyClasses() {
   }, []);
 
   const fetchClasses = () => {
-    api.get('/admin/classes').then((r) => {
-      setClasses(r.data.filter((c) => c.trainerId === user?.id));
-    }).catch(() => {}).finally(() => setLoading(false));
+    api.get('/classes/my').then((r) => setClasses(r.data)).catch(() => {}).finally(() => setLoading(false));
   };
 
   const handleDelete = async (id) => {

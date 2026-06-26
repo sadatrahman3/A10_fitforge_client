@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { toast } from 'react-toastify';
 import api from '../../../utils/axios';
+import ImageUploadField from '../../../components/shared/ImageUploadField';
 
 export default function TrainerAddPost() {
   const { user } = useAuth();
@@ -35,10 +36,7 @@ export default function TrainerAddPost() {
             <label className="block text-sm text-muted mb-1">Title</label>
             <input name="title" required value={form.title} onChange={handleChange} className="w-full bg-dark border border-accent/30 rounded-lg px-4 py-3 text-light focus:border-primary outline-none transition" />
           </div>
-          <div>
-            <label className="block text-sm text-muted mb-1">Image URL (Imgbb)</label>
-            <input name="image" value={form.image} onChange={handleChange} className="w-full bg-dark border border-accent/30 rounded-lg px-4 py-3 text-light focus:border-primary outline-none transition" placeholder="https://..." />
-          </div>
+          <ImageUploadField value={form.image} onChange={(image) => setForm({ ...form, image })} />
           <div>
             <label className="block text-sm text-muted mb-1">Description</label>
             <textarea name="description" required rows={6} value={form.description} onChange={handleChange} className="w-full bg-dark border border-accent/30 rounded-lg px-4 py-3 text-light focus:border-primary outline-none transition" />

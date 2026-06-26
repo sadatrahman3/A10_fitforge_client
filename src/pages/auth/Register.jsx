@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import { Dumbbell, Mail, Lock, User, Image } from 'lucide-react';
+import GoogleSignInButton from '../../components/shared/GoogleSignInButton';
 
 export default function Register() {
   const { register } = useAuth();
@@ -32,6 +33,11 @@ export default function Register() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleSuccess = () => {
+    toast.success('Account ready. Welcome to FitForge!');
+    navigate('/');
   };
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -79,6 +85,12 @@ export default function Register() {
               {loading ? 'Creating Account...' : 'Create Account'}
             </button>
           </form>
+          <div className="flex items-center gap-3 my-6">
+            <div className="h-px flex-1 bg-accent/20" />
+            <span className="text-xs text-muted">or</span>
+            <div className="h-px flex-1 bg-accent/20" />
+          </div>
+          <GoogleSignInButton onSuccess={handleGoogleSuccess} />
           <p className="text-center text-muted text-sm mt-6">
             Already a member? <Link to="/login" className="text-primary hover:underline font-semibold">Sign In</Link>
           </p>

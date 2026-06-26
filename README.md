@@ -1,6 +1,7 @@
 # FitForge Client
 
-**Live Site:** https://fitforge.vercel.app  
+**Live Site:** https://a10-fitforge-client.vercel.app
+**Server API:** https://a10-fitforge-server.onrender.com
 **Server Repo:** https://github.com/sadatrahman3/A10_fitforge_server
 
 ## Purpose
@@ -17,7 +18,7 @@ FitForge is a comprehensive fitness management platform for fitness enthusiasts,
 ## Tech Stack
 - React + Vite
 - Tailwind CSS
-- React Router v6
+- React Router v7
 - Framer Motion
 - Axios
 - React Toastify
@@ -33,3 +34,9 @@ FitForge is a comprehensive fitness management platform for fitness enthusiasts,
 - `react-helmet-async` - SEO
 - `@stripe/stripe-js` - Payments
 - `lucide-react` - Icons
+
+## Environment Variables
+- `VITE_GOOGLE_CLIENT_ID` - Google Identity Services client ID for Google login.
+- `VITE_STRIPE_PUBLISHABLE_KEY` - Stripe publishable key.
+- `VITE_IMGBB_API_KEY` - Imgbb API key for forum post image uploads.
+- `VITE_API_URL` - Optional API base URL. Leave unset on Vercel when using the included `/api` rewrite.

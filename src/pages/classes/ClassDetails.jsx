@@ -34,6 +34,7 @@ export default function ClassDetails() {
 
   const handleFavorite = async () => {
     if (!user) return toast.error('Please login to add favorites');
+    if (user.status === 'blocked') return toast.error('Action restricted by Admin');
     setFavLoading(true);
     try {
       if (isFavorite) {
