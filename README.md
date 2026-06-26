@@ -1,3 +1,7 @@
+Admin Login:- admin@fitforge.com
+Admin Password:- Aa12345
+
+
 # FitForge Client
 
 **Live Site:** https://a10-fitforge-client.vercel.app
